@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',  # For Angular or any other front-end running on this port
     'http://127.0.0.1:8000',  # If you are testing your frontend on a different port
+    "http://198.71.55.91"
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 
