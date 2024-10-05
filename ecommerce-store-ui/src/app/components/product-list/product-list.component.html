@@ -1,0 +1,45 @@
+<div class="product-page">
+  <!-- Top Row: Product List and Cart Summary -->
+  <div class="top-row">
+    
+    <!-- Product List (75%) -->
+    <div class="product-list">
+      <mat-card *ngFor="let product of products" class="product-card">
+        <mat-card-title>{{ product.name }}</mat-card-title>
+        <mat-card-content>
+          <p>{{ product.description }}</p>
+          <p>Price: {{ product.price | currency }}</p>
+          <button mat-raised-button color="accent" (click)="addToCart(product)">
+            Add to Cart
+          </button>
+          <p>In Cart: {{ cart[product.id] || 0 }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Cart Summary (25%) -->
+    <div class="cart-summary">
+      <mat-card>
+        <mat-card-title>Cart Summary</mat-card-title>
+        <p>Total Items: {{ totalItemsInCart }}</p>
+        <button mat-raised-button color="primary" routerLink="/cart">Go to Cart</button>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Previous Orders Section (Full-width) -->
+  <div class="previous-orders">
+    <mat-card>
+      <mat-card-title>Previous Orders</mat-card-title>
+      <mat-list>
+        <mat-list-item *ngFor="let order of previousOrders" class="order-item">
+          <div class="order-details">
+            <h4>Order #{{ order.id }}</h4>
+            <p>Total Price: {{ order.total_price | currency }}</p>
+            <p>Placed on: {{ order.created_at | date }}</p>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,112 @@
+/* product-list.component.scss */
+
+/* Main layout of the page */
+.product-page {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    /* Space between top and previous orders section */
+}
+
+/* Top row holds the product list and cart summary side by side */
+.top-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Product List (75% width) */
+.product-list {
+    flex: 0 0 75%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* Product Cards */
+.product-card {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.product-card p {
+    font-size: 0.9rem;
+    color: #616161;
+}
+
+/* Cart Summary (25% width) */
+.cart-summary {
+    flex: 0 0 25%;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #fafafa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: sticky;
+    top: 20px;
+}
+
+.cart-summary button {
+    width: 150px;
+    margin-top: 20px;
+}
+
+/* Previous Orders Section */
+.previous-orders {
+    width: 100%;
+    margin-top: 40px;
+}
+
+.previous-orders mat-card {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.previous-orders mat-card-title {
+    font-weight: bold;
+    color: #3f51b5;
+    text-align: center;
+}
+
+.previous-orders mat-list {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.order-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.order-details h4 {
+    margin-bottom: 5px;
+    color: #3f51b5;
+}
+
+.order-details p {
+    margin: 3px 0;
+    color: #757575;
+}
+
+.order-item:hover {
+    background-color: #f5f5f5;
+}

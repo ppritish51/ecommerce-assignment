@@ -1,0 +1,21 @@
+<mat-card class="cart-container">
+    <mat-card-title>Your Cart</mat-card-title>
+
+    <mat-list *ngIf="cartItems.length > 0; else emptyCart">
+        <mat-list-item *ngFor="let item of cartItems" class="cart-item">
+            <div class="item-details">
+                <h4>{{ item.product.name }} ({{ item.quantity }})</h4>
+                <p>Price: {{ item.product.price }} x {{ item.quantity }} = {{ item.product.price * item.quantity }}</p>
+            </div>
+        </mat-list-item>
+    </mat-list>
+
+    <ng-template #emptyCart>
+        <p>Your cart is empty.</p>
+    </ng-template>
+
+    <div *ngIf="cartItems.length > 0" class="cart-summary">
+        <h3>Total: {{ totalPrice | currency }}</h3>
+        <button mat-raised-button color="primary" (click)="checkout()">Checkout</button>
+    </div>
+</mat-card>
