@@ -12,48 +12,56 @@ from .serializers import OrderSerializer, DiscountCodeSerializer
 class CheckoutAPI(APIView):
     def post(self, request):
         user = request.user
-        try:
-            cart = Cart.objects.get(user=user)
-        except Cart.DoesNotExist:
-            return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+        cart = Cart.objects.get(user=user)
 
-        # Calculate total price
+        # Calculate total price from cart items
         total_price = sum([item.product.price * item.quantity for item in cart.items.all()])
 
-        # Get discount code from request (optional)
-        discount_code = request.data.get('discount_code')
-        discount = None
+        # Check if the user qualifies for a discount based on their order count
+        order_count = Order.objects.filter(user=user).count() + 1  # Increment to include this current order
         discount_value = Decimal(0)
 
-        if discount_code:
+        if order_count % 2 == 0:  # Assuming nth order is every 2nd order
+            # Apply 10% discount
+            discount_value = total_price * Decimal(0.1)
+            total_price -= discount_value
+
+            # Generate a unique discount code by appending a timestamp or random value
+            discount_code = f"DISCOUNT{order_count}_{user.id}"
+
+            # Ensure the discount code is unique, else handle IntegrityError
             try:
-                discount = DiscountCode.objects.get(code=discount_code, is_used=False)
-                discount_value = total_price * (discount.discount_percentage / 100)
-                total_price -= discount_value
-            except DiscountCode.DoesNotExist:
-                return Response({'error': 'Invalid or used discount code'}, status=status.HTTP_400_BAD_REQUEST)
+                DiscountCode.objects.create(
+                    code=discount_code,
+                    discount_percentage=10.00,
+                    is_used=True  # Mark it used since it's automatically applied
+                )
+            except IntegrityError:
+                return Response({'error': 'Discount code creation failed due to uniqueness violation.'},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         # Create the order
         order = Order.objects.create(user=user, total_price=total_price, discount_value=discount_value)
 
-        # Create order items from cart items
+        # Add order items from the cart
         for cart_item in cart.items.all():
             OrderItem.objects.create(
                 order=order,
                 product=cart_item.product,
                 quantity=cart_item.quantity,
-                price=cart_item.product.price
+                price=cart_item.product.price  # Include the price here
             )
 
-        # Mark discount code as used
-        if discount:
-            discount.is_used = True
-            discount.save()
-
-        # Clear the cart
+        # Clear the cart after the order is placed
         cart.items.all().delete()
 
-        return Response({'message': 'Order placed successfully', 'order_id': order.id}, status=status.HTTP_201_CREATED)
+        # Return the response with order details
+        return Response({
+            'message': 'Order placed successfully',
+            'order_id': order.id,
+            'total_price': total_price,
+            'discount_applied': discount_value
+        }, status=status.HTTP_201_CREATED)
 
 
 class OrderHistoryAPI(APIView):
