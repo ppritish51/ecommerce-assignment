@@ -27,13 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200',  # For Angular or any other front-end running on this port
-    'http://127.0.0.1:8000',  # If you are testing your frontend on a different port
-    "http://198.71.55.91:80",
-    "http://198.71.55.91"
-]
+# Allow CORS for all origins, methods, and headers
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_METHODS = True
+CORS_ALLOW_ALL_HEADERS = True
 
 # Application definition
 
